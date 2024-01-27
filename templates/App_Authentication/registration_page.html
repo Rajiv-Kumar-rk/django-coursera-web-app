@@ -1,0 +1,26 @@
+{% extends 'App_Course/base.html' %}
+{% load crispy_forms_tags %}
+{% block page_title %}
+    Skill Gliding | Register
+{% endblock %}
+
+{% block body_content %}
+<div class="container" style="padding-top:20px; margin-top: 50px;">
+    <h1>Register</h1>
+{% if register_status %}
+    <div class="alert alert-success">
+        Registered Successfully! <a href="{% url 'user_login' %}">Login Now</a>
+    </div>
+{% else %}
+    
+    <form action="{% url 'user_registration' %}" method="post">
+        {{registration_form|crispy}}
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-sm">Register</button>
+    </form>
+    <br>
+    <small>Already have an Account? <a href="{% url 'user_login' %}">Login Now</a></small>
+{% endif %}
+</div>
+<br>
+{% endblock %}

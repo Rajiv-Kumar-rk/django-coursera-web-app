@@ -1,0 +1,27 @@
+{% extends 'App_Course/base.html' %}
+{% load custom_tags %}
+
+{% block page_title %}
+    Skill Gliding | Profile
+{% endblock %}
+
+{% block navbar_menu_tab_for_profile %} 
+    active
+{% endblock %}
+
+{% block body_content %}
+    
+    
+    <div class="container-fluid" >
+        <h3 style="margin-top: 70px; margin-left: 20px;">
+            Profile
+        </h3>
+        <br>
+        <div class="" style="margin-left: 20px;">
+            <h3>Name: {{user.first_name}} {{user.last_name}}</h3>
+            <h3>User Name: {{user}}</h3>
+            <h3>Email: {{user.email}}</h3>
+        </div>
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'App_Course/base.html' %}
+{% load custom_tags %}
+
+{% block page_title %}
+    Skill Gliding | Home
+{% endblock %}
+
+{% block navbar_menu_tab_for_home %} 
+ active
+{% endblock %}
+
+{% block body_content %}
+    
+    
+    <div class="container-fluid" >
+        <h3  style="margin-top: 70px; margin-left: 20px;">
+            Courses
+        </h3>
+        <br>
+        <div class="row">
+            {% for course in courses %}
+            <div class="col mx-auto">
+                <div class="card mx-auto" style="width: 18rem;">
+                    <img class="card-img-top" src="/media/{{ course.banner_pic }}" alt="{{ course.name }}" title="{{ course.name }}" width="100%">
+                    <div class="card-body">
+                      <h5 class="card-title">{{course.name}}</h5>
+                      <p class="card-text">
+                        Save {{course.discount_percentage}}% <br>
+                        <span class="price" style="font-size: 20px;">
+                            <del>₹ {{course.price}}</del> &nbsp;
+                            <span>₹ {% calc_selling_price course.price course.discount_percentage %}</span>
+                        </span> 
+                      </p> 
+                    </div> 
+                    
+                    <div class="card-footer p-0">
+                        {% is_enrolled request course.slug as enrolled %}
+
+                        {% if enrolled %}
+                        <div class="row no-gutters">
+                        <div class="col ">
+                            <a href="{% url 'course' slug=course.slug %}" class="btn btn-light btn-block">Go To Course</a>
+                        </div>
+                        </div>
+                        {% else %}
+                        <div class="row no-gutters">
+                            <div class="col border-right">
+                                <a href="{% url 'enroll_to_course' slug=course.slug %}" class="btn btn-light btn-block">Enroll Now</a>
+                            </div>
+                            <div class="col">
+                                <a href="{% url 'course' slug=course.slug %}" class="btn btn-light btn-block">Show More</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+{% endblock %}

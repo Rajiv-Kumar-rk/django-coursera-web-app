@@ -1,0 +1,44 @@
+{% extends 'App_Course/base.html' %}
+{% load custom_tags %}
+
+{% block page_title %}
+    Skill Gliding | My Courses
+{% endblock %}
+
+{% block navbar_menu_tab_for_my_courses %} 
+    active
+{% endblock %}
+
+{% block body_content %}
+
+    <div class="container-fluid" >
+        <h3  style="margin-top: 70px; margin-left: 20px;">
+            My Courses
+        </h3>
+        <br>
+        <div class="row">
+            {% for uc  in user_courses %}
+            
+            <div class="col mx-auto">
+                <div class="card mx-auto" style="width: 18rem;">
+                    <img class="card-img-top" src="/media/{{ uc.course.banner_pic }}" alt="{{ uc.course.name }}" title="{{ uc.course.name }}" width="100%">
+                    <div class="card-body">
+                      <h5 class="card-title">{{uc.course.name}}</h5>
+                    </div> 
+
+                    <div class="card-footer p-0">
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <a href="{% url 'course' slug=uc.course.slug %}" class="btn btn-light btn-block">Go To Course</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        
+            {% endfor %}
+        </div>
+    </div>
+    
+{% endblock %}

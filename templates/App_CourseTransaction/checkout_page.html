@@ -1,0 +1,97 @@
+{% extends 'App_Course/base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block page_title %}
+    Skill Gliding | Check-Out Course
+{% endblock %}
+
+{% block body_content %}
+
+<div class="container-fluid" style="padding-top:20px; margin-top: 50px;">
+    
+    <h1>Check-Out Course:</h1>
+    <br>
+    <div class="card p-3">
+        <div class="row">
+
+            <!------------- Course Banner and Details --------------->
+            <div class="col border-right">
+                <div class="row">
+                    <div class="col" >
+                        <img src="/media/{{ course.banner_pic }}" alt="{{ course.name }}" title="{{ course.name }}" width="100%">
+                    </div>
+                    
+                    <div class="col-7">
+                        <h4 style="margin-left: -15px;"><a href="{% url 'course' slug=course.slug %}">{{course.name}}</a></h4>
+                        <h6 style="margin-left: -15px;">By Admin</h6>
+
+                        <h5 style="margin-left: -15px;">Total Hours: {{course.length}}hrs</h5>
+                        <p style="margin-left: -15px;">
+                            Save {{course.discount_percentage}}% <br>
+                            <span class="price" style="font-size: 20px;">
+                                <del>₹{{course.price}}</del> &nbsp;
+                                <span>₹{% calc_selling_price course.price course.discount_percentage %}</span>
+                            </span>
+                          </p> 
+                    </div>
+                </div>
+            </div>
+
+            <!-------------- Course Payment Details ---------------->
+            <div class="col-3" >
+                <h5>Total:</h5>
+                <h3><b>₹{% calc_selling_price course.price course.discount_percentage %}</b></h3>
+                <h6><del>₹{{course.price}}</del></h6>
+                <p>{{course.discount_percentage}}% off</p>
+                {% if error is not None %}
+                <button type="button" class="btn btn-light disabled" style="width: 100%; cursor: not-allowed;" title="Already Enrolled!">Proceed To Payment</button>
+                <a href="{% url 'course' slug=course.slug %}" class="btn btn-info" style="width: 100%; margin-top: 10px;">Go To Course</a>
+                {% else %}
+                <a href="?action=create_payment" class="btn btn-primary" style="width: 100%;">Proceed to Payment</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+    
+    {% if order is not None %}
+    
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            "key": "rzp_test_k5YLk2uLkPTWUL", // Enter the Key ID generated from the Dashboard
+            "name": "Skill Gliding",
+            "description": "Payment for Course({{course.name}})",
+            //"image": "https://example.com/your_logo",
+            "order_id": "{{order.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "callback_url": "http://localhost:8000/verify_payment",
+            "prefill": {
+                "name": "{{order.notes.name}}",
+                "email": "{{order.notes.email}}",
+                //"contact": "9000090000"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    </script>
+    {% endif %}
+    
+    {% if error is not None %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        window.onload = () => {
+            alert("{{error}}");
+        }
+    </script>
+    {% endif %}
+
+</div>
+<br>
+{% endblock %}
+
+
+
